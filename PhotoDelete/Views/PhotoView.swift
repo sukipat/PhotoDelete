@@ -10,14 +10,25 @@ import PhotosUI
 
 struct PhotoView: View {
     @EnvironmentObject var viewModel: PhotoPickerViewModel
-    @State private var showingPreview = false
+    @State private var image: Image?
     
     var body: some View {
-        if let asset = viewModel.asset {
-            Image(uiImage: asset.getThumbnailImage())
-        } else {
-            Text("Failed to get Image")
+        ZStack {
+            if let thumbnailImage = viewModel.asset?.getThumbnailImage() {
+                Image(uiImage: thumbnailImage)
+            } else {
+                ProgressView()
+            }
         }
+        .task {
+            await getRandomAsset()
+        }
+    }
+}
+
+extension PhotoView {
+    func getRandomAsset() async {
+        viewModel.getRandomAsset()
     }
 }
 

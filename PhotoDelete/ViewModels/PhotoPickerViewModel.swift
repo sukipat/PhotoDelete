@@ -12,23 +12,73 @@ import Combine
 // MARK: - Properties
 @Observable
 class PhotoPickerViewModel: ObservableObject {
-    var assets: PHFetchResult<PHAsset>? = nil
+    private var assets: PHFetchResult<PHAsset>? = nil
     private let photoAuthorizer = PhotoAuthorizer()
     var asset: PHAsset? = nil
+    var assetURL: URL? = nil
+    private var assetCollection: PHAssetCollection? = nil
 
     init() {
         self.photoAuthorizer.checkAuth()
+        self.setupCustomAlbum()
     }
 }
 
-// MARK: - Public Functions
+// MARK: - Public Auth Functions
 extension PhotoPickerViewModel {
     func checkAuthandGet() {
         self.photoAuthorizer.checkAuth()
         if self.photoAuthorizer.getAuthStatus() != .notPermitted {
             self.getAssets()
-            self.getRandomAsset()
         }
+    }
+    
+    func getAuthStatus() -> AuthStatusCodes {
+        return self.photoAuthorizer.getAuthStatus()
+    }
+}
+
+// MARK: - Album Creation and Modification
+extension PhotoPickerViewModel {
+    private func setupCustomAlbum() {
+        if albumExists() { return }
+        PHPhotoLibrary.shared().performChanges {
+            PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: "Photo Delete")
+        } completionHandler: { success, error in
+            if !success { print("Error creating album: \(String(describing: error)).") }
+        }
+        if albumExists() { return }
+    }
+    
+    private func albumExists() -> Bool {
+        var albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: .none)
+        let albumsCount = 0..<albums.count
+        for index in albumsCount {
+            let album = albums.object(at: index)
+            if album.localizedTitle == "Photo Delete" {
+                print("Found the album!!")
+                self.assetCollection = album
+                return true
+            }
+        }
+        return false
+    }
+    
+    func addToAlbum() {
+        PHPhotoLibrary.shared().performChanges {
+            if let url = self.assetURL {
+                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url)
+                if let collection = self.assetCollection {
+                    let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
+                    addAssetRequest?.addAssets([creationRequest?.placeholderForCreatedAsset!] as NSArray)
+                }
+                self.assetURL = nil
+            }
+        } completionHandler: { success, error in
+            if !success { print("Error creating the asset: \(String(describing: error))") }
+            if success { print("ADDED TO ALBUM YAY")}
+        }
+
     }
 }
 
@@ -36,16 +86,24 @@ extension PhotoPickerViewModel {
 extension PhotoPickerViewModel {
     private func getAssets() {
         if photoAuthorizer.getAuthStatus() == .notPermitted { return }
-        let fetchResult = PHAsset.fetchAssets(with: nil)
+        let fetchResult = PHAsset.fetchAssets(with: .image, options: nil)
         assets = fetchResult
     }
     
     func getRandomAsset() {
         if assets == nil {
-            asset = nil
             return
         }
         let randomIndex = Int.random(in: 0..<assets!.count)
-        asset = assets?.object(at: randomIndex)        
+        asset = assets?.object(at: randomIndex)
+        DispatchQueue.global().async {
+            self.asset?.getURL(completionHandler: { responseURL in
+                if let url = responseURL {
+                    let urlString = String(url.absoluteString.dropFirst(7))
+                    self.assetURL = URL(string: urlString)
+                    print(urlString)
+                }
+            })
+        }
     }
 }

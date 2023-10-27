@@ -9,10 +9,12 @@ import QuickLook
 import SwiftUI
 
 struct PreviewController: UIViewControllerRepresentable {
-    let url: URL
+    @EnvironmentObject var viewModel: PhotoPickerViewModel
+    @State var assetURL: URL?
     
     func makeUIViewController(context: Context) -> some UIViewController {
         let controller = QLPreviewController()
+        self.fetchURL()
         return controller
     }
     
@@ -22,6 +24,15 @@ struct PreviewController: UIViewControllerRepresentable {
     
     func makeCoordinator() -> Coordinator {
         return Coordinator(parent: self)
+    }
+    
+    func fetchURL() {
+        if let asset = viewModel.asset {
+            asset.getURL { responseURL in
+                self.assetURL = responseURL
+                print(responseURL)
+            }
+        }
     }
 }
 
@@ -37,6 +48,10 @@ class Coordinator: QLPreviewControllerDataSource {
     }
     
     func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-        return parent.url as NSURL
+        parent.fetchURL()
+        if let url = parent.assetURL {
+            return url as NSURL
+        }
+        return URL(string: "https://apple.com")! as NSURL
     }
 }
