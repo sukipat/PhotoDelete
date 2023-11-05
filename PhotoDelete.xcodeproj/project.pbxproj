@@ -85,8 +85,8 @@
 		BCE6616D2AE8EACD00F57594 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				BCE661752AE974ED00F57594 /* PreviewView.swift */,
 				BCE661592AE8A3BF00F57594 /* ContentView.swift */,
+				BCE661752AE974ED00F57594 /* PreviewView.swift */,
 				BCE6616A2AE8EA7900F57594 /* MenuBarView.swift */,
 				BCE661672AE8DAD300F57594 /* PhotoView.swift */,
 			);

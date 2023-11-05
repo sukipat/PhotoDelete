@@ -12,27 +12,31 @@ struct ContentView: View {
     @EnvironmentObject var viewModel: PhotoPickerViewModel
     @State private var showingPreview = false
     @State private var url: URL?
+    @State private var dragAmount = CGSize.zero
     
     var body: some View {
         VStack{
             MenuBarView()
             PhotoView()
-                .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
-                    .onEnded({ value in
-                        if value.translation.width < 10 {
-                            viewModel.addToAlbum()
-                            viewModel.getRandomAsset()
-                            viewModel.assetURL = nil
-                        }
-                        
-                        if value.translation.width > 10 {
-                            DispatchQueue.global().async {
-                                viewModel.getRandomAsset()
-                                viewModel.assetURL = nil
+                .offset(dragAmount)
+                .gesture(
+                    DragGesture()
+                        .onChanged { dragAmount = $0.translation }
+                        .onEnded { offset in
+                            if offset.translation.width < 10 {
+                                Task {
+                                    await viewModel.addToAlbum()
+                                    viewModel.getRandomAsset()
+                                }
                             }
+    
+                            if offset.translation.width > 10 {
+                                viewModel.getRandomAsset()
+                            }
+                            dragAmount = .zero
                         }
-                    }))
-            Text(viewModel.assetURL?.absoluteString ?? "No URL")
+                )
+                .animation(.bouncy, value: dragAmount)
             Spacer()
         }
         .task {

@@ -14,20 +14,13 @@ struct MenuBarView: View {
         HStack {
             Button(action: {
                 print("Trash Button Pressed")
+                UIApplication.shared.open(URL(string:"photos-redirect://")!)
+                
             }, label: {
                 Image(systemName: "square.stack")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 22)
-            })
-            Spacer()
-            Button(action: {
-                viewModel.getRandomAsset()
-            }, label: {
-                Image(systemName: "arrow.clockwise")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width:30)
             })
             Spacer()
             Button(action: {

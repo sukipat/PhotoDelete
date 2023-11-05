@@ -13,21 +13,31 @@ struct PhotoView: View {
     @State private var image: Image?
     
     var body: some View {
-        ZStack {
-            if let thumbnailImage = viewModel.asset?.getThumbnailImage() {
-                Image(uiImage: thumbnailImage)
-            } else {
-                ProgressView()
+        GeometryReader { proxy in
+            ZStack {
+                if let thumbnailImage = viewModel.asset?.getThumbnailImage() {
+                        Image(uiImage: thumbnailImage)
+                            .resizable()
+                            .scaledToFit()
+                            .clipShape(RoundedRectangle(cornerRadius: 25))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 25)
+                                    .stroke(.white, lineWidth: 4)
+                            )
+                } else {
+                    ProgressView()
+                }
             }
-        }
-        .task {
-            await getRandomAsset()
+            .task {
+                getRandomAsset()
+            }
+            .frame(width: proxy.size.width, height: proxy.size.height, alignment: .center)
         }
     }
 }
 
 extension PhotoView {
-    func getRandomAsset() async {
+    func getRandomAsset() {
         viewModel.getRandomAsset()
     }
 }

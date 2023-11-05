@@ -23,7 +23,7 @@ extension PHAsset {
         return thumbnail
     }
     
-    func getURL(completionHandler : @escaping ((_ responseURL : URL?) -> Void)) {
+    func getURL(completionHandler : @escaping ((_ responseURL : URL?) -> Void)) async {
             if self.mediaType == .image {
                 let options: PHContentEditingInputRequestOptions = PHContentEditingInputRequestOptions()
                 options.isNetworkAccessAllowed = true
@@ -46,5 +46,6 @@ extension PHAsset {
                     }
                 })
             }
+        
     }
 }

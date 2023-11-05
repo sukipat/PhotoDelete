@@ -51,7 +51,7 @@ extension PhotoPickerViewModel {
     }
     
     private func albumExists() -> Bool {
-        var albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: .none)
+        let albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: .none)
         let albumsCount = 0..<albums.count
         for index in albumsCount {
             let album = albums.object(at: index)
@@ -64,21 +64,27 @@ extension PhotoPickerViewModel {
         return false
     }
     
-    func addToAlbum() {
-        PHPhotoLibrary.shared().performChanges {
-            if let url = self.assetURL {
-                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url)
-                if let collection = self.assetCollection {
-                    let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
-                    addAssetRequest?.addAssets([creationRequest?.placeholderForCreatedAsset!] as NSArray)
+    func addToAlbum() async {
+        await self.asset?.getURL(completionHandler: { responseURL in
+            if let url = responseURL {
+                let urlString = String(url.absoluteString.dropFirst(7))
+                self.assetURL = URL(string: urlString)
+                print(urlString)
+                PHPhotoLibrary.shared().performChanges {
+                    if let url = self.assetURL {
+                        let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url)
+                        if let collection = self.assetCollection {
+                            let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
+                            addAssetRequest?.addAssets([creationRequest?.placeholderForCreatedAsset!] as NSArray)
+                        }
+                        self.assetURL = nil
+                    }
+                } completionHandler: { success, error in
+                    if !success { print("Error creating the asset: \(String(describing: error))") }
+                    if success { print("ADDED TO ALBUM YAY")}
                 }
-                self.assetURL = nil
             }
-        } completionHandler: { success, error in
-            if !success { print("Error creating the asset: \(String(describing: error))") }
-            if success { print("ADDED TO ALBUM YAY")}
-        }
-
+        })
     }
 }
 
@@ -96,14 +102,12 @@ extension PhotoPickerViewModel {
         }
         let randomIndex = Int.random(in: 0..<assets!.count)
         asset = assets?.object(at: randomIndex)
-        DispatchQueue.global().async {
-            self.asset?.getURL(completionHandler: { responseURL in
-                if let url = responseURL {
-                    let urlString = String(url.absoluteString.dropFirst(7))
-                    self.assetURL = URL(string: urlString)
-                    print(urlString)
-                }
-            })
-        }
+//        await self.asset?.getURL(completionHandler: { responseURL in
+//            if let url = responseURL {
+//                let urlString = String(url.absoluteString.dropFirst(7))
+//                self.assetURL = URL(string: urlString)
+//                print(urlString)
+//            }
+//        })
     }
 }

@@ -14,7 +14,9 @@ struct PreviewController: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> some UIViewController {
         let controller = QLPreviewController()
-        self.fetchURL()
+        Task {
+            await self.fetchURL()
+        }
         return controller
     }
     
@@ -26,9 +28,9 @@ struct PreviewController: UIViewControllerRepresentable {
         return Coordinator(parent: self)
     }
     
-    func fetchURL() {
+    func fetchURL() async {
         if let asset = viewModel.asset {
-            asset.getURL { responseURL in
+           await asset.getURL { responseURL in
                 self.assetURL = responseURL
                 print(responseURL)
             }
@@ -48,7 +50,9 @@ class Coordinator: QLPreviewControllerDataSource {
     }
     
     func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-        parent.fetchURL()
+        Task {
+            await parent.fetchURL()
+        }
         if let url = parent.assetURL {
             return url as NSURL
         }
