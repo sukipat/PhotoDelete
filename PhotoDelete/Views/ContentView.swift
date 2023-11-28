@@ -26,7 +26,6 @@ struct ContentView: View {
                             if offset.translation.width < 10 {
                                 Task {
                                     await viewModel.addToAlbum()
-                                    viewModel.getRandomAsset()
                                 }
                             }
     
