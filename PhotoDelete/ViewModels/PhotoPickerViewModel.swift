@@ -15,7 +15,8 @@ class PhotoPickerViewModel: ObservableObject {
     private var assets: PHFetchResult<PHAsset>? = nil
     private let photoAuthorizer = PhotoAuthorizer()
     var asset: PHAsset? = nil
-    private var assetCollection: PHAssetCollection? = nil
+    var assetCollection: PHAssetCollection? = nil
+    var showingPreview:Bool = false
 
     init() {
         self.photoAuthorizer.checkAuth()

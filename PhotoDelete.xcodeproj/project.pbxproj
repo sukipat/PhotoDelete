@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC74EF282B16C4740094D9EA /* AlbumCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC74EF272B16C4740094D9EA /* AlbumCellView.swift */; };
+		BCBC52772B161107001931ED /* AlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBC52762B161107001931ED /* AlbumView.swift */; };
 		BCE661582AE8A3BF00F57594 /* PhotoDeleteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE661572AE8A3BF00F57594 /* PhotoDeleteApp.swift */; };
 		BCE6615A2AE8A3BF00F57594 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE661592AE8A3BF00F57594 /* ContentView.swift */; };
 		BCE6615C2AE8A3C000F57594 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BCE6615B2AE8A3C000F57594 /* Assets.xcassets */; };
@@ -20,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BC74EF272B16C4740094D9EA /* AlbumCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCellView.swift; sourceTree = "<group>"; };
+		BCBC52762B161107001931ED /* AlbumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumView.swift; sourceTree = "<group>"; };
 		BCE661542AE8A3BF00F57594 /* PhotoDelete.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoDelete.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCE661572AE8A3BF00F57594 /* PhotoDeleteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDeleteApp.swift; sourceTree = "<group>"; };
 		BCE661592AE8A3BF00F57594 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -86,6 +90,8 @@
 			isa = PBXGroup;
 			children = (
 				BCE661592AE8A3BF00F57594 /* ContentView.swift */,
+				BCBC52762B161107001931ED /* AlbumView.swift */,
+				BC74EF272B16C4740094D9EA /* AlbumCellView.swift */,
 				BCE661752AE974ED00F57594 /* PreviewView.swift */,
 				BCE6616A2AE8EA7900F57594 /* MenuBarView.swift */,
 				BCE661672AE8DAD300F57594 /* PhotoView.swift */,
@@ -197,8 +203,10 @@
 				BCE6615A2AE8A3BF00F57594 /* ContentView.swift in Sources */,
 				BCE661582AE8A3BF00F57594 /* PhotoDeleteApp.swift in Sources */,
 				BCE661662AE8A6C800F57594 /* PhotoPickerViewModel.swift in Sources */,
+				BCBC52772B161107001931ED /* AlbumView.swift in Sources */,
 				BCE6617A2AEB506C00F57594 /* PhotoAssetExtension.swift in Sources */,
 				BCE661682AE8DAD300F57594 /* PhotoView.swift in Sources */,
+				BC74EF282B16C4740094D9EA /* AlbumCellView.swift in Sources */,
 				BCE6616B2AE8EA7900F57594 /* MenuBarView.swift in Sources */,
 				BCE661762AE974ED00F57594 /* PreviewView.swift in Sources */,
 				BCE661782AEB4D3600F57594 /* PhotoAuthorizer.swift in Sources */,

@@ -11,11 +11,11 @@ import PhotosUI
 struct PhotoView: View {
     @EnvironmentObject var viewModel: PhotoPickerViewModel
     @State private var image: Image?
-    
+
     var body: some View {
         GeometryReader { proxy in
             ZStack {
-                if let thumbnailImage = viewModel.asset?.getThumbnailImage() {
+                if let thumbnailImage = viewModel.asset?.getThumbnailImage(imageWidth: 500, imageHeight: 500) {
                         Image(uiImage: thumbnailImage)
                             .resizable()
                             .scaledToFit()

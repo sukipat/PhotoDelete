@@ -9,12 +9,12 @@ import SwiftUI
 
 struct MenuBarView: View {
     @EnvironmentObject var viewModel: PhotoPickerViewModel
-    
+
     var body: some View {
         HStack {
             Button(action: {
                 print("Trash Button Pressed")
-                UIApplication.shared.open(URL(string:"photos-redirect://")!)
+                viewModel.showingPreview.toggle()
                 
             }, label: {
                 Image(systemName: "square.stack")

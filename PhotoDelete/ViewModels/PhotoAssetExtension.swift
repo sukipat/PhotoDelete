@@ -11,13 +11,13 @@ import Combine
 
 // MARK: - PHAsset Extension
 extension PHAsset {
-    func getThumbnailImage() -> UIImage {
+    func getThumbnailImage(imageWidth: Int, imageHeight: Int) -> UIImage {
         let manager = PHImageManager.default()
         let option = PHImageRequestOptions()
         var thumbnail = UIImage()
         option.isSynchronous = true
         option.isNetworkAccessAllowed = true
-        manager.requestImage(for: self, targetSize: CGSize(width:500, height: 500), contentMode: .aspectFit, options: option) {(result, info) -> Void in
+        manager.requestImage(for: self, targetSize: CGSize(width: imageWidth, height: imageHeight), contentMode: .aspectFit, options: option) {(result, info) -> Void in
             thumbnail = result!
         }
         return thumbnail
